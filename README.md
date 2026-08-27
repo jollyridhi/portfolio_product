@@ -1,4 +1,4 @@
-# Ridhi Jolly — AI Product Manager
+# Ridhi Jolly 
 
 Personal portfolio for an AI / platform PM search. Built as a live WCAG 2.1 AA proof point: skip link, landmarks, keyboard navigation, visible focus, 4.5:1 contrast, labeled forms, and `prefers-reduced-motion`.
 
