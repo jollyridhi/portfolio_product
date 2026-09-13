@@ -2,21 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --canvas: 247 245 250;
-  --ink: 42 36 51;
-  --muted: 102 94 116;
-  --accent: 197 173 197;
-  --accent-fg: 42 36 51;
-  --surface: 253 252 255;
-  --line: 220 214 230;
-  --mist: 178 181 224;
-  --display: clamp(2.5rem, 5.4vw, 4.35rem);
-  --title: clamp(1.85rem, 3.2vw, 2.85rem);
-  --lede: clamp(1.2rem, 1.6vw, 1.55rem);
-  color-scheme: light;
-}
-
+:root,
 .dark {
   --canvas: 18 16 24;
   --ink: 244 241 247;
@@ -26,7 +12,22 @@
   --surface: 32 28 42;
   --line: 58 52 72;
   --mist: 108 112 158;
+  --display: clamp(2.5rem, 5.4vw, 4.35rem);
+  --title: clamp(1.85rem, 3.2vw, 2.85rem);
+  --lede: clamp(1.2rem, 1.6vw, 1.55rem);
   color-scheme: dark;
+}
+
+.light {
+  --canvas: 247 245 250;
+  --ink: 42 36 51;
+  --muted: 102 94 116;
+  --accent: 197 173 197;
+  --accent-fg: 42 36 51;
+  --surface: 253 252 255;
+  --line: 220 214 230;
+  --mist: 178 181 224;
+  color-scheme: light;
 }
 
 html {

@@ -20,15 +20,15 @@ const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 function applyTheme(theme: Theme) {
   document.documentElement.classList.toggle("dark", theme === "dark");
+  document.documentElement.classList.toggle("light", theme === "light");
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("light");
+  const [theme, setTheme] = useState<Theme>("dark");
 
   useEffect(() => {
     const stored = window.localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const next: Theme = stored === "dark" || stored === "light" ? stored : prefersDark ? "dark" : "light";
+    const next: Theme = stored === "light" ? "light" : "dark";
     setTheme(next);
     applyTheme(next);
   }, []);
