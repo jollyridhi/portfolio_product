@@ -174,33 +174,32 @@ export const kadeepStudiosStudy = {
     "v0.3 almost shipped the other way — hostname special-cases and an LLM on every flake. That makes spend track UI volatility, and the recovery path becomes a black box no QA lead can explain to a release manager. Named skills make the common path cheap, inspectable, and repeatable. The LLM stays attached to genuine novelty. Same idea as a senior SDET: cheap playbooks before an expensive model.",
   screenshots: [
     {
-      src: "/case-studies/kadeep/01-create.png",
+      frame: "studios-create" as const,
       alt: "KaDeep Studios create surface: Start Recording plus Automate test with AI on the workspace dashboard.",
       caption: "Create surface — “what do you want to test today?” Record a URL or generate with KaDeep AI.",
-      wide: true,
     },
     {
-      src: "/case-studies/kadeep/02-ai-generate.png",
+      frame: "studios-workspace" as const,
       alt: "KaDeep workspace with recent runs, OTP timeout evidence, and release-gate metrics.",
       caption: "Live workspace — pass/fail, OTP failures, and release-readiness metrics.",
     },
     {
-      src: "/case-studies/kadeep/04-accessibility.png",
+      frame: "studios-rules" as const,
       alt: "Side-by-side product UI: rule-based matcher on the left and a natural-language AI step on the right.",
       caption: "Rules first, then plain English. The AI step shows parse → filter → act, not a black box.",
     },
     {
-      src: "/case-studies/kadeep/03-self-heal.png",
-      alt: "KaDeep marketing and product cards for AI authoring, self-heal rules-first, and managed cloud runs.",
+      frame: "studios-heal" as const,
+      alt: "KaDeep product cards for skills-first self-heal: fuzzy match first, then the model, with an audit trail.",
       caption: "Agentic authoring and healing sit inside the IDE — rules first, AI only when needed.",
     },
     {
-      src: "/case-studies/kadeep/05-schedule.png",
+      frame: "studios-locators" as const,
       alt: "Project locator rules marking hashed CSS as blocked and data-testid as preferred.",
       caption: "Locator truth as a project rule, inherited by the suite — not a per-test hotfix.",
     },
     {
-      src: "/case-studies/kadeep/06-evidence.png",
+      frame: "studios-evidence" as const,
       alt: "Jira and TestRail integrations plus failure cards that raise issues with build evidence attached.",
       caption: "Evidence leaves the run: tickets get the build link, screenshot, and video.",
     },

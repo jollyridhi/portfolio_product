@@ -30,7 +30,7 @@ export default function KadeepAccessibilityCaseStudyPage() {
             href="/#case-studies"
             className="inline-flex min-h-11 items-center text-sm text-muted underline-offset-4 hover:text-ink hover:underline"
           >
-            Back to case studies
+            Back to work
           </Link>
         </div>
         <AccessibilityCaseStudy />

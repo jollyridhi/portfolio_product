@@ -3,23 +3,23 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import { SkipLink } from "@/components/SkipLink";
 import { Footer } from "@/components/Footer";
-import { KadeepCaseStudy } from "@/components/KadeepCaseStudy";
-import { kadeepStudiosStudy } from "@/data/case-studies/kadeep-studios";
+import { TestStudiosCaseStudy } from "@/components/TestStudiosCaseStudy";
+import { noCodeStudiosStudy } from "@/data/case-studies/no-code-studios";
 import { site } from "@/data/content";
 
 export const metadata: Metadata = {
-  title: kadeepStudiosStudy.seoTitle,
-  description: kadeepStudiosStudy.seoDescription,
-  alternates: { canonical: "/case-studies/kadeep-studios" },
+  title: noCodeStudiosStudy.seoTitle,
+  description: noCodeStudiosStudy.seoDescription,
+  alternates: { canonical: "/case-studies/test-studios" },
   openGraph: {
-    title: kadeepStudiosStudy.seoTitle,
-    description: kadeepStudiosStudy.seoDescription,
-    url: `${site.url}/case-studies/kadeep-studios`,
+    title: noCodeStudiosStudy.seoTitle,
+    description: noCodeStudiosStudy.seoDescription,
+    url: `${site.url}/case-studies/test-studios`,
     type: "article",
   },
 };
 
-export default function KadeepStudiosCaseStudyPage() {
+export default function TestStudiosCaseStudyPage() {
   return (
     <>
       <SkipLink />
@@ -33,7 +33,7 @@ export default function KadeepStudiosCaseStudyPage() {
             Back to work
           </Link>
         </div>
-        <KadeepCaseStudy />
+        <TestStudiosCaseStudy />
       </main>
       <Footer />
     </>

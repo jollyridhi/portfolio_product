@@ -1,14 +1,13 @@
-import { kadeepAccessibilityStudy as study } from "@/data/case-studies/kadeep-accessibility";
+import { noCodeStudiosStudy as study } from "@/data/case-studies/no-code-studios";
 import { adjacentStudies } from "@/data/content";
 import { FlowDiagram } from "@/components/FlowDiagram";
 import { LoopBrief } from "@/components/LoopBrief";
 import { CaseStudyShell } from "@/components/CaseStudyShell";
 import { ProductShot } from "@/components/ProductShot";
 
-export function AccessibilityCaseStudy() {
-  const heroShot = study.screenshots[3];
-  const gallery = study.screenshots.filter((_, index) => index !== 3);
-  const pager = adjacentStudies("accessibility-product");
+export function TestStudiosCaseStudy() {
+  const heroShot = study.screenshots[0];
+  const pager = adjacentStudies("test-studios");
 
   return (
     <article>
@@ -16,19 +15,14 @@ export function AccessibilityCaseStudy() {
         <div className="mx-auto max-w-wide px-6 py-12 lg:px-8 lg:py-16">
           <p className="text-sm font-medium uppercase tracking-[0.16em] text-accent">{study.eyebrow}</p>
           <h1 className="mt-4 max-w-4xl font-serif text-4xl leading-tight text-ink sm:text-5xl">{study.title}</h1>
-          <p className="mt-5 max-w-3xl text-lg leading-relaxed text-muted">{study.subtitle}</p>
-          <dl className="mt-8 grid gap-6 border-t border-line pt-6 sm:grid-cols-2 lg:grid-cols-3">
-            <Meta label="Role" value={study.role} />
-            <Meta label="Scope" value={study.scope} />
-            <div>
-              <dt className="text-sm uppercase tracking-[0.14em] text-muted">Live</dt>
-              <dd className="mt-2">
-                <a href={study.live.href} target="_blank" rel="noopener noreferrer" className="underline-offset-4 hover:underline">
-                  {study.live.label}
-                  <span className="sr-only"> (opens in a new tab)</span>
-                </a>
-              </dd>
-            </div>
+          <p className="mt-5 max-w-3xl font-serif text-xl italic leading-relaxed text-muted">{study.subtitle}</p>
+          <dl className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+            {study.facts.map((fact) => (
+              <div key={fact.label} className="bg-surface px-5 py-4">
+                <dt className="text-xs font-medium uppercase tracking-[0.14em] text-muted">{fact.label}</dt>
+                <dd className="mt-1 text-base text-ink">{fact.value}</dd>
+              </div>
+            ))}
           </dl>
         </div>
       </header>
@@ -69,11 +63,41 @@ export function AccessibilityCaseStudy() {
                 <section>
                   <h2 className="font-serif text-3xl text-ink">The problem</h2>
                   <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted">{study.problemLead}</p>
+                  <div className="mt-6 grid gap-4 lg:grid-cols-3">
+                    {study.problemCards.map((card) => (
+                      <div key={card.title} className="border-t border-line pt-4">
+                        <h3 className="font-serif text-xl text-ink">{card.title}</h3>
+                        <p className="mt-2 text-sm leading-relaxed text-muted">{card.text}</p>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+                <section>
+                  <h2 className="font-serif text-3xl text-ink">{study.insightQuote}</h2>
+                  <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted">{study.insight}</p>
+                  <div className="mt-6 overflow-x-auto rounded-2xl border border-line">
+                    <table className="w-full min-w-[32rem] text-left text-sm">
+                      <thead className="border-b border-line bg-canvas">
+                        <tr>
+                          <th className="px-4 py-3 font-medium text-muted">Layer</th>
+                          <th className="px-4 py-3 font-medium text-muted">Job</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {study.layers.map((layer) => (
+                          <tr key={layer.name} className="border-b border-line last:border-0">
+                            <th className="px-4 py-3 font-medium text-ink">{layer.name}</th>
+                            <td className="px-4 py-3 text-muted">{layer.job}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </section>
                 <section>
                   <h2 className="font-serif text-3xl text-ink">What shipped</h2>
                   <ol className="mt-6 space-y-6">
-                    {study.shipped.map((item) => (
+                    {study.solutions.map((item) => (
                       <li key={item.number} className="grid gap-2 lg:grid-cols-[4rem_minmax(0,1fr)]">
                         <p className="font-serif text-2xl text-accent">{item.number}</p>
                         <div>
@@ -84,28 +108,6 @@ export function AccessibilityCaseStudy() {
                     ))}
                   </ol>
                 </section>
-                <section>
-                  <h2 className="font-serif text-3xl text-ink">Packaging</h2>
-                  <ul className="mt-6 grid gap-4 lg:grid-cols-3">
-                    {study.packaging.map((tier) => (
-                      <li key={tier.tier} className="border-t border-line pt-4">
-                        <p className="font-serif text-xl text-ink">{tier.tier}</p>
-                        <p className="mt-1 text-sm uppercase tracking-[0.14em] text-accent">{tier.price}</p>
-                        <p className="mt-2 text-sm text-muted">{tier.detail}</p>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-                <section>
-                  <h2 className="font-serif text-3xl text-ink">Surfaces</h2>
-                  <ul className="mt-6 grid gap-6 lg:grid-cols-2">
-                    {gallery.map((shot) => (
-                      <li key={shot.frame}>
-                        <ProductShot id={shot.frame} alt={shot.alt} caption={shot.caption} />
-                      </li>
-                    ))}
-                  </ul>
-                </section>
               </div>
             ),
           },
@@ -114,26 +116,6 @@ export function AccessibilityCaseStudy() {
             label: "Outcome",
             panel: (
               <div className="mx-auto max-w-wide space-y-14 px-6 py-12 lg:px-8">
-                <div className="grid gap-8 lg:grid-cols-2">
-                  <article className="border-t border-accent/40 pt-5">
-                    <p className="text-sm uppercase tracking-[0.16em] text-accent">{study.proof.title}</p>
-                    <p className="mt-3 font-serif text-5xl text-ink">{study.proof.score}</p>
-                    <p className="mt-1 text-ink">{study.proof.grade}</p>
-                    <ul className="mt-4 space-y-2">
-                      {study.proof.facts.map((fact) => (
-                        <li key={fact.label} className="flex gap-3 text-sm text-muted">
-                          <span className="font-serif text-xl text-accent">{fact.value}</span>
-                          <span className="pt-1">{fact.label}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </article>
-                  <article className="border-t border-line pt-5">
-                    <p className="text-sm uppercase tracking-[0.16em] text-muted">{study.selfScan.title}</p>
-                    <p className="mt-3 font-serif text-5xl text-ink">{study.selfScan.score}</p>
-                    <p className="mt-3 text-sm text-muted">{study.selfScan.plan}</p>
-                  </article>
-                </div>
                 <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {study.outcomes.map((item) => (
                     <li key={item.label} className="border-t border-line pt-4">
@@ -143,9 +125,21 @@ export function AccessibilityCaseStudy() {
                     </li>
                   ))}
                 </ul>
+                <p className="max-w-3xl text-base leading-relaxed text-muted">{study.outcomeNarrative}</p>
                 <section>
                   <h2 className="font-serif text-3xl text-ink">What I got wrong</h2>
                   <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted">{study.miss}</p>
+                </section>
+                <section>
+                  <h2 className="font-serif text-3xl text-ink">Hard problems</h2>
+                  <div className="mt-6 grid gap-4 lg:grid-cols-2">
+                    {study.hardProblems.map((item) => (
+                      <article key={item.title}>
+                        <h3 className="font-serif text-xl text-ink">{item.title}</h3>
+                        <p className="mt-2 text-sm leading-relaxed text-muted">{item.text}</p>
+                      </article>
+                    ))}
+                  </div>
                 </section>
                 <section>
                   <h2 className="font-serif text-3xl text-ink">Next</h2>
@@ -164,14 +158,5 @@ export function AccessibilityCaseStudy() {
         ]}
       />
     </article>
-  );
-}
-
-function Meta({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <dt className="text-sm uppercase tracking-[0.14em] text-muted">{label}</dt>
-      <dd className="mt-2 text-sm leading-relaxed text-ink">{value}</dd>
-    </div>
   );
 }

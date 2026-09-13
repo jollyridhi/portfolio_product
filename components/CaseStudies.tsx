@@ -1,12 +1,13 @@
-import Image from "next/image";
 import { caseStudies, caseStudiesIntro } from "@/data/content";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading } from "@/components/SectionHeading";
+import { TiltCard } from "@/components/TiltCard";
+import { ProductShot } from "@/components/ProductShot";
 
 export function CaseStudies() {
   return (
-    <section id="case-studies" aria-labelledby="case-studies-heading" className="border-b border-line">
-      <div className="mx-auto max-w-wide px-6 py-20 lg:px-8 lg:py-24">
+    <section id="case-studies" aria-labelledby="case-studies-heading" className="border-y border-line">
+      <div className="mx-auto max-w-wide px-6 py-16 lg:px-8 lg:py-20">
         <Reveal>
           <SectionHeading
             id="case-studies-heading"
@@ -16,84 +17,58 @@ export function CaseStudies() {
           />
         </Reveal>
 
-        <div className="mt-14 grid gap-8">
+        <div className="mt-10 flex snap-row gap-4 overflow-x-auto pb-4 lg:grid lg:grid-cols-3 lg:overflow-visible lg:pb-0">
           {caseStudies.map((study, index) => (
-            <Reveal key={study.id} delayMs={index * 60}>
-              <article
-                id={study.id}
-                aria-labelledby={`${study.id}-title`}
-                className="lift overflow-hidden rounded-box border border-line bg-surface shadow-card"
-              >
-                <div className="relative min-h-[18rem] overflow-hidden bg-canvas sm:min-h-[22rem] lg:min-h-[28rem]">
-                  <Image
-                    src={study.cover}
-                    alt={study.coverAlt}
-                    fill
-                    sizes="(min-width: 1280px) 1400px, 100vw"
-                    className="object-cover object-top"
-                  />
-                  <div
-                    aria-hidden="true"
-                    className="absolute inset-0 bg-gradient-to-t from-black via-black/55 to-black/15"
-                  />
-                  <div className="absolute inset-x-0 bottom-0 p-6 sm:p-10">
-                    <p className="text-sm font-medium uppercase tracking-[0.16em] text-white/85">
-                      Case study {study.number} · {study.product}
-                    </p>
-                    <h3
-                      id={`${study.id}-title`}
-                      className="mt-3 max-w-4xl font-serif text-3xl leading-tight text-white [text-shadow:0_2px_24px_rgb(0_0_0_/_0.55)] sm:text-5xl"
-                    >
-                      {study.title}
-                    </h3>
-                  </div>
-                </div>
-
-                <div className="grid gap-8 p-6 sm:p-10 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,0.65fr)]">
-                  <div>
-                    <p className="text-lg leading-relaxed text-muted">{study.problem}</p>
-                    <p className="mt-5 text-base leading-relaxed text-ink">{study.impact}</p>
-                    <blockquote className="mt-8 border-l-2 border-accent pl-5">
-                      <p className="font-serif text-2xl leading-snug text-ink sm:text-3xl">
-                        {study.decisionQuote}
-                      </p>
-                    </blockquote>
-                    <div className="mt-8 flex flex-wrap gap-3">
-                      {study.href ? (
-                        <a
-                          href={study.href}
-                          className="inline-flex min-h-12 items-center rounded-full bg-accent px-5 text-sm font-medium text-accent-fg hover:opacity-90"
-                        >
-                          {study.cta ?? "Read the full case study"}
-                        </a>
-                      ) : null}
-                      {study.liveHref ? (
-                        <a
-                          href={study.liveHref}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex min-h-12 items-center rounded-full border border-line px-5 text-sm font-medium text-ink hover:border-accent"
-                        >
-                          {study.liveLabel}
-                          <span className="sr-only"> (opens in a new tab)</span>
-                        </a>
-                      ) : null}
+            <Reveal key={study.id} delayMs={index * 70} className="min-w-[min(85vw,24rem)] snap-start lg:min-w-0">
+              <TiltCard>
+              <article id={study.id} className="group flex h-full flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-card">
+                <a href={study.href} className="block overflow-hidden bg-canvas">
+                  <div className="relative aspect-[16/10] overflow-hidden">
+                    <div className="img-zoom h-full">
+                      <ProductShot id={study.coverFrame} alt={study.coverAlt} compact />
                     </div>
                   </div>
-
-                  <ul className="grid grid-cols-2 gap-3">
+                  <p className="border-t border-line px-5 py-2 text-xs font-medium uppercase tracking-[0.14em] text-muted">
+                    {study.number} · {study.product}
+                  </p>
+                </a>
+                <div className="flex flex-1 flex-col p-5">
+                  <h3 className="font-serif text-2xl leading-snug text-ink">
+                    <a href={study.href} className="hover:underline">
+                      {study.title}
+                    </a>
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">{study.line}</p>
+                  <ul className="mt-5 grid grid-cols-3 gap-2">
                     {study.metrics.map((metric) => (
-                      <li
-                        key={metric.label}
-                        className="rounded-2xl border border-line bg-canvas px-4 py-5"
-                      >
-                        <p className="font-serif text-3xl text-accent sm:text-4xl">{metric.value}</p>
-                        <p className="mt-2 text-xs leading-snug text-muted sm:text-sm">{metric.label}</p>
+                      <li key={metric.label} className="rounded-xl bg-canvas px-2 py-3 text-center">
+                        <p className="font-serif text-xl text-accent">{metric.value}</p>
+                        <p className="mt-1 text-[11px] leading-snug text-muted">{metric.label}</p>
                       </li>
                     ))}
                   </ul>
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    <a
+                      href={study.href}
+                      className="inline-flex min-h-11 items-center rounded-full bg-accent px-4 text-sm font-medium text-accent-fg hover:opacity-90"
+                    >
+                      {study.cta}
+                    </a>
+                    {study.liveHref ? (
+                      <a
+                        href={study.liveHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex min-h-11 items-center rounded-full border border-line px-4 text-sm text-ink hover:border-accent"
+                      >
+                        {study.liveLabel}
+                        <span className="sr-only"> (opens in a new tab)</span>
+                      </a>
+                    ) : null}
+                  </div>
                 </div>
               </article>
+              </TiltCard>
             </Reveal>
           ))}
         </div>

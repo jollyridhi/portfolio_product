@@ -17,6 +17,7 @@ const config: Config = {
         "accent-fg": "rgb(var(--accent-fg) / <alpha-value>)",
         surface: "rgb(var(--surface) / <alpha-value>)",
         line: "rgb(var(--line) / <alpha-value>)",
+        mist: "rgb(var(--mist) / <alpha-value>)",
       },
       fontFamily: {
         serif: ["var(--font-serif)", "Georgia", "serif"],

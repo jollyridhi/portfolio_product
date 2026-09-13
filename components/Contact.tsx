@@ -9,15 +9,17 @@ type FormState = {
   name: string;
   email: string;
   message: string;
+  company: string;
 };
 
-const empty: FormState = { name: "", email: "", message: "" };
+const empty: FormState = { name: "", email: "", message: "", company: "" };
 
 export function Contact() {
   const [values, setValues] = useState<FormState>(empty);
   const [errors, setErrors] = useState<Partial<FormState>>({});
   const [status, setStatus] = useState<string>("");
-  const [draft, setDraft] = useState<{ mailto: string; gmail: string } | null>(null);
+  const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
   const formId = useId();
 
   function validate(next: FormState) {
@@ -31,37 +33,91 @@ export function Contact() {
     return result;
   }
 
-  function onSubmit(event: FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const nextErrors = validate(values);
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) {
+      setSent(false);
       setStatus("Please fix the errors in the form.");
       return;
     }
 
-    const subject = encodeURIComponent(`Portfolio inquiry from ${values.name}`);
-    const body = encodeURIComponent(`${values.message}\n\n— ${values.name} (${values.email})`);
-    const mailto = `mailto:${links.email}?subject=${subject}&body=${body}`;
-    const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(links.email)}&su=${subject}&body=${body}`;
+    if (values.company.trim()) {
+      setSent(true);
+      setValues(empty);
+      setStatus("Sent. Ridhi will reply to the email you entered.");
+      return;
+    }
 
-    const trigger = document.createElement("a");
-    trigger.href = mailto;
-    trigger.style.display = "none";
-    document.body.appendChild(trigger);
-    trigger.click();
-    trigger.remove();
+    setSending(true);
+    setStatus("");
+    try {
+      const payload = {
+        name: values.name.trim(),
+        email: values.email.trim(),
+        message: values.message.trim(),
+        company: values.company,
+      };
 
-    void navigator.clipboard?.writeText(
-      `To: ${links.email}\nSubject: Portfolio inquiry from ${values.name}\n\n${values.message}\n\n— ${values.name} (${values.email})`,
-    );
+      const apiResponse = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const apiResult = (await apiResponse.json()) as { ok?: boolean; error?: string };
 
-    setDraft({ mailto, gmail });
-    setStatus("Draft ready. If Mail did not open, use Gmail or the copied note.");
+      if (apiResponse.ok && apiResult.ok) {
+        setSent(true);
+        setValues(empty);
+        setStatus("Sent. Ridhi will reply to the email you entered.");
+        return;
+      }
+
+      const submit = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(links.email)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name: payload.name,
+          email: payload.email,
+          message: payload.message,
+          _subject: `Portfolio inquiry from ${payload.name}`,
+          _template: "table",
+          _captcha: "false",
+          _replyto: payload.email,
+        }),
+      });
+      const submitResult = (await submit.json()) as { success?: boolean | string; message?: string };
+      const ok = submitResult.success === true || submitResult.success === "true";
+      const activate = (submitResult.message ?? "").toLowerCase().includes("activat");
+      if (activate) {
+        setSent(true);
+        setValues(empty);
+        setStatus(
+          "Almost. Ridhi’s inbox has a one-time “Activate Form” link from FormSubmit. After that click, every message lands.",
+        );
+        return;
+      }
+      if (!ok) {
+        throw new Error(submitResult.message || "Send failed.");
+      }
+      setSent(true);
+      setValues(empty);
+      setStatus("Sent. Ridhi will reply to the email you entered.");
+    } catch (error) {
+      setSent(false);
+      setStatus(
+        error instanceof Error
+          ? `${error.message} You can also email ${links.email}.`
+          : `Could not send just now. Email ${links.email}.`,
+      );
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
-    <section id="contact" aria-labelledby="contact-heading" className="bg-accent text-accent-fg">
+    <section id="contact" aria-labelledby="contact-heading" className="bg-mist">
       <div className="mx-auto max-w-wide px-6 py-20 lg:px-8 lg:py-24">
         <Reveal>
           <SectionHeading
@@ -69,7 +125,6 @@ export function Contact() {
             eyebrow="Contact"
             title={contact.heading}
             description={contact.intro}
-            tone="inverse"
           />
         </Reveal>
 
@@ -78,13 +133,13 @@ export function Contact() {
             <address className="not-italic">
               <ul className="space-y-4 text-base">
                 <li>
-                  <span className="block text-sm uppercase tracking-[0.14em] text-accent-fg/70">Phone</span>
+                  <span className="block text-sm uppercase tracking-[0.14em] text-muted">Phone</span>
                   <a href={links.phoneHref} className="mt-1 inline-flex min-h-11 items-center underline-offset-4 hover:underline">
                     {links.phone}
                   </a>
                 </li>
                 <li>
-                  <span className="block text-sm uppercase tracking-[0.14em] text-accent-fg/70">Email</span>
+                  <span className="block text-sm uppercase tracking-[0.14em] text-muted">Email</span>
                   <a href={`mailto:${links.email}`} className="mt-1 inline-flex min-h-11 items-center underline-offset-4 hover:underline">
                     {links.email}
                   </a>
@@ -94,7 +149,7 @@ export function Contact() {
                     href={links.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex min-h-11 items-center rounded-full border border-accent-fg/30 px-4 text-sm font-medium hover:bg-accent-fg/10"
+                    className="inline-flex min-h-11 items-center rounded-full border border-line px-4 text-sm font-medium text-ink hover:border-accent"
                   >
                     LinkedIn<span className="sr-only"> (opens in a new tab)</span>
                   </a>
@@ -102,7 +157,7 @@ export function Contact() {
                     href={links.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex min-h-11 items-center rounded-full border border-accent-fg/30 px-4 text-sm font-medium hover:bg-accent-fg/10"
+                    className="inline-flex min-h-11 items-center rounded-full border border-line px-4 text-sm font-medium text-ink hover:border-accent"
                   >
                     GitHub<span className="sr-only"> (opens in a new tab)</span>
                   </a>
@@ -110,7 +165,7 @@ export function Contact() {
                     href={links.leetcode}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex min-h-11 items-center rounded-full border border-accent-fg/30 px-4 text-sm font-medium hover:bg-accent-fg/10"
+                    className="inline-flex min-h-11 items-center rounded-full border border-line px-4 text-sm font-medium text-ink hover:border-accent"
                   >
                     Coding profile<span className="sr-only"> on LeetCode (opens in a new tab)</span>
                   </a>
@@ -118,7 +173,7 @@ export function Contact() {
               </ul>
               <a
                 href={links.resume}
-                className="mt-8 inline-flex min-h-11 items-center rounded-full bg-accent-fg px-5 text-sm font-medium text-accent hover:opacity-90"
+                className="magnetic mt-8 inline-flex min-h-11 items-center rounded-full bg-accent px-5 text-sm font-medium text-accent-fg"
               >
                 Download Resume
               </a>
@@ -129,9 +184,20 @@ export function Contact() {
             <form
               onSubmit={onSubmit}
               noValidate
-              className="rounded-box border border-accent-fg/20 bg-accent-fg/10 p-6 sm:p-8"
+              className="rounded-box border border-line bg-surface p-6 shadow-card sm:p-8"
             >
-              <p className="text-sm text-accent-fg/80">{contact.formNote}</p>
+              <p className="text-sm text-muted">{contact.formNote}</p>
+              <div className="sr-only" aria-hidden="true">
+                <label htmlFor={`${formId}-company`}>Company</label>
+                <input
+                  id={`${formId}-company`}
+                  name="company"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={values.company}
+                  onChange={(event) => setValues((current) => ({ ...current, company: event.target.value }))}
+                />
+              </div>
 
               <div className="mt-6 space-y-5">
                 <Field
@@ -165,10 +231,10 @@ export function Contact() {
                     onChange={(event) =>
                       setValues((current) => ({ ...current, message: event.target.value }))
                     }
-                    className="mt-2 w-full rounded-xl border border-accent-fg/25 bg-canvas px-3 py-3 text-ink"
+                    className="mt-2 w-full rounded-xl border border-line bg-canvas px-3 py-3 text-ink"
                   />
                   {errors.message ? (
-                    <p id={`${formId}-message-error`} className="mt-2 text-sm text-accent-fg" role="alert">
+                    <p id={`${formId}-message-error`} className="mt-2 text-sm text-ink" role="alert">
                       {errors.message}
                     </p>
                   ) : null}
@@ -177,31 +243,27 @@ export function Contact() {
 
               <button
                 type="submit"
-                className="mt-6 inline-flex min-h-11 items-center rounded-full bg-accent-fg px-5 text-sm font-medium text-accent hover:opacity-90"
+                disabled={sending}
+                className="magnetic mt-6 inline-flex min-h-11 items-center rounded-full bg-accent px-5 text-sm font-medium text-accent-fg disabled:opacity-60"
               >
-                Send message
+                {sending ? "Sending…" : "Send message"}
               </button>
               {status ? (
-                <div className="mt-5 rounded-2xl border border-accent-fg/25 bg-accent-fg/10 p-4" role="status" aria-live="polite">
-                  <p className="text-sm text-accent-fg">{status}</p>
-                  {draft ? (
-                    <div className="mt-3 flex flex-wrap gap-3">
-                      <a
-                        href={draft.gmail}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex min-h-11 items-center rounded-full bg-accent-fg px-4 text-sm font-medium text-accent hover:opacity-90"
-                      >
-                        Open in Gmail
-                        <span className="sr-only"> (opens in a new tab)</span>
-                      </a>
-                      <a
-                        href={draft.mailto}
-                        className="inline-flex min-h-11 items-center rounded-full border border-accent-fg/30 px-4 text-sm font-medium hover:bg-accent-fg/10"
-                      >
-                        Open Mail app
-                      </a>
-                    </div>
+                <div
+                  className={`mt-5 rounded-2xl border p-4 ${
+                    sent ? "border-accent/40 bg-accent/15" : "border-line bg-canvas"
+                  }`}
+                  role="status"
+                  aria-live="polite"
+                >
+                  <p className="text-sm text-ink">{status}</p>
+                  {!sent ? (
+                    <a
+                      href={`mailto:${links.email}`}
+                      className="mt-3 inline-flex min-h-11 items-center text-sm font-medium underline-offset-4 hover:underline"
+                    >
+                      {links.email}
+                    </a>
                   ) : null}
                 </div>
               ) : null}
@@ -244,10 +306,10 @@ function Field({
         aria-invalid={Boolean(error)}
         aria-describedby={error ? `${id}-error` : undefined}
         onChange={(event) => onChange(event.target.value)}
-        className="mt-2 w-full rounded-xl border border-accent-fg/25 bg-canvas px-3 py-3 text-ink"
+        className="mt-2 w-full rounded-xl border border-line bg-canvas px-3 py-3 text-ink"
       />
       {error ? (
-        <p id={`${id}-error`} className="mt-2 text-sm text-accent-fg" role="alert">
+        <p id={`${id}-error`} className="mt-2 text-sm text-ink" role="alert">
           {error}
         </p>
       ) : null}

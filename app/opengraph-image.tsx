@@ -16,8 +16,8 @@ export default function OpenGraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#F7F6F2",
-          color: "#141414",
+          background: "#F7F5FA",
+          color: "#2A2433",
           padding: "72px 80px",
           fontFamily: "Georgia, serif",
         }}
@@ -25,13 +25,16 @@ export default function OpenGraphImage() {
         <div
           style={{
             display: "flex",
+            alignItems: "center",
+            gap: 16,
             fontSize: 22,
             letterSpacing: "0.18em",
             textTransform: "uppercase",
-            color: "#2C3480",
+            color: "#2A2433",
             fontFamily: "system-ui, sans-serif",
           }}
         >
+          <div style={{ width: 18, height: 18, borderRadius: 99, background: "#C5ADC5" }} />
           {site.title}
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
@@ -40,13 +43,13 @@ export default function OpenGraphImage() {
             style={{
               fontSize: 28,
               lineHeight: 1.4,
-              color: "#4A4A4A",
+              color: "#665E74",
               maxWidth: 920,
               fontFamily: "system-ui, sans-serif",
             }}
           >
-            Early-career AI and platform PM. Two live products.
-            Skills-first AI. Accessibility without a fake “compliant” stamp.
+            Studios, TestStudios, Accessibility. Skills-first AI.
+            Open to PM seats in India, Canada, and the UAE.
           </div>
         </div>
         <div
@@ -54,13 +57,24 @@ export default function OpenGraphImage() {
             display: "flex",
             justifyContent: "space-between",
             fontSize: 20,
-            color: "#4A4A4A",
+            color: "#665E74",
             fontFamily: "system-ui, sans-serif",
           }}
         >
           <span>IEEE-published ML researcher</span>
-          <span>KaDeep Technologies</span>
+          <span>KaDeep AI</span>
         </div>
+        <div
+          style={{
+            position: "absolute",
+            right: 80,
+            bottom: 72,
+            width: 160,
+            height: 160,
+            borderRadius: 999,
+            background: "#B2B5E0",
+          }}
+        />
       </div>
     ),
     { ...size },

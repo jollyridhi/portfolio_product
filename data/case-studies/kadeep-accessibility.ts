@@ -2,15 +2,15 @@ export const kadeepAccessibilityStudy = {
   slug: "kadeep-accessibility",
   seoTitle: "KaDeep Accessibility — What do I fix first?",
   seoDescription:
-    "Case study: how Ridhi Jolly shipped KaDeep Accessibility — 396 WCAG 2.2 checks, a 0–100 score, ADA / 508 / EAA matrices, a sprint plan, and a real result on xactload.com (89/100, 0 Critical / 0 Serious).",
-  eyebrow: "Case study 02 · KaDeep · B2B SaaS · Developer tools · Compliance",
+    "Case study: how Ridhi Jolly shipped KaDeep Accessibility — 396 WCAG 2.2 checks, a 0–100 score, ADA / 508 / EN 301 549 matrices, a sprint plan, and a real result on xactload.com (89/100, 0 Critical / 0 Serious).",
+  eyebrow: "Case study 03 · KaDeep · B2B SaaS · Developer tools · Compliance",
   title: "KaDeep Accessibility — What do I fix first?",
   subtitle:
     "Teams do not need another 300-row dump. They need three things, in order, with time estimates.",
   hero:
     "I watched the same broken workflow over and over: run a scan, get a CSV, feel overwhelmed, do nothing. The tools were not the problem. Nobody was answering the only question that unblocks a team — what do I fix first? I built the product that does.",
   role:
-    "Product Manager / Accessibility Lead — I owned problem definition, ICP and jobs-to-be-done, product narrative, MVP scope, scoring and prioritization logic, compliance framing (WCAG / ADA / Section 508 / EAA), packaging, and go-to-market with engineering.",
+    "Product Manager / Accessibility Lead — I owned problem definition, ICP and jobs-to-be-done, product narrative, MVP scope, scoring and prioritization logic, compliance framing (WCAG / ADA / Section 508 / EN 301 549), packaging, and go-to-market with engineering.",
   scope: "Problem framing through packaging — scan, score, plan, AI fix, re-scan",
   team: "Founder/CEO, Head of Engineering, Accessibility Lead",
   live: {
@@ -304,32 +304,32 @@ export const kadeepAccessibilityStudy = {
     "What exists because of this work: a full accessibility surface — public marketing, authenticated workspace, run history, detailed run report — and a pipeline from URL to Apify crawl to axe-core + extended checks to score, matrices, plan, AI fix, and PDF. The first external proof is xactload.com. Qualitative: accessibility moved from a specialist report that arrives too late, to a workflow a PM can start, an engineer can execute, and a compliance stakeholder can read — from the same scan.",
   screenshots: [
     {
-      src: "/case-studies/accessibility/01-hero.png",
+      frame: "a11y-score" as const,
       alt: "KaDeep Accessibility hero with a 49/100 health score, issue list, and 396 WCAG 2.2 checks.",
       caption: "URL in. One number a VP can read: 49/100, 149 issues, 9 pages, 396 checks.",
     },
     {
-      src: "/case-studies/accessibility/02-product.png",
+      frame: "a11y-suite" as const,
       alt: "Six-product suite: scanner, compliance audit, structure map, fix plan, Fix with AI, re-scan.",
       caption: "One run, many jobs — scanner, compliance, map, plan, AI fix, re-scan.",
     },
     {
-      src: "/case-studies/accessibility/03-mid.png",
+      frame: "a11y-scanner" as const,
       alt: "Scanner narrative: 396 WCAG 2.2 checks via axe-core on Apify Cloud, with a 49/100 health score broken down by severity.",
       caption: "JS-rendered crawl on Apify. Weighted score, not a raw violation count.",
     },
     {
-      src: "/case-studies/accessibility/04-plan.png",
+      frame: "a11y-plan" as const,
       alt: "Sprint-ready fix plan showing 49 to 64 after P1 and 100 after P2, with WCAG-referenced tasks.",
       caption: "P1/P2 with hours, WCAG IDs, and projected score. Planning estimates, not contracts.",
     },
     {
-      src: "/case-studies/accessibility/05-pricing.png",
+      frame: "a11y-map" as const,
       alt: "Component-level issue map ranking DOM selectors by violation count, with 55 components identified.",
       caption: "Issues mapped to selectors, not just pages — so an engineer knows what to open.",
     },
     {
-      src: "/case-studies/accessibility/06-footer.png",
+      frame: "a11y-table" as const,
       alt: "Extended WCAG 2.2 findings table plus testing tools: axe-core, KaDeep Extended, and Apify Cloud.",
       caption: "Criterion-level evidence, plus an honest stack: axe-core for trust, KaDeep Extended for 2.2.",
     },

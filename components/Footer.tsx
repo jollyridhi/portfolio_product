@@ -10,6 +10,10 @@ export function Footer() {
             © {new Date().getFullYear()} {site.name}. {site.title}.
           </p>
           <p>
+            <a href={links.resume} className="underline-offset-4 hover:underline">
+              Resume
+            </a>
+            <span aria-hidden="true"> · </span>
             <a href={`mailto:${links.email}`} className="underline-offset-4 hover:underline">
               {links.email}
             </a>

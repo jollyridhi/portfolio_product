@@ -1,14 +1,50 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import Image from "next/image";
 import { nav, site } from "@/data/content";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [active, setActive] = useState("");
   const menuId = useId();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const height = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(height > 0 ? Math.min(100, (window.scrollY / height) * 100) : 0);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const ids = nav
+      .map((item) => item.href)
+      .filter((href) => href.startsWith("#"))
+      .map((href) => href.slice(1));
+    const nodes = ids
+      .map((id) => document.getElementById(id))
+      .filter((node): node is HTMLElement => Boolean(node));
+    if (!nodes.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible?.target.id) setActive(`#${visible.target.id}`);
+      },
+      { rootMargin: "-35% 0px -50% 0px", threshold: [0.1, 0.25, 0.5] },
+    );
+    nodes.forEach((node) => observer.observe(node));
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -36,14 +72,20 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 overflow-visible border-b border-line/80 bg-canvas/85 backdrop-blur-md">
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 top-0 h-0.5 bg-line/60"
+      >
+        <div className="h-full bg-accent transition-[width] duration-150" style={{ width: `${progress}%` }} />
+      </div>
       <div className="mx-auto flex max-w-wide items-center justify-between gap-4 px-6 py-3.5 lg:px-8">
         <a href="/" className="flex min-h-11 items-center gap-3 rounded-md">
-          <img
-            src="/avatar.png"
+          <Image
+            src="/face.png"
             alt=""
-            width={32}
-            height={32}
-            className="size-8 shrink-0 rounded-full border border-line object-cover object-[50%_32%]"
+            width={80}
+            height={80}
+            className="size-10 shrink-0 rounded-full border border-line object-cover object-[50%_18%] ring-2 ring-mist/70"
           />
           <span className="text-sm font-medium tracking-tight">
             {site.name}
@@ -51,16 +93,23 @@ export function Header() {
           </span>
         </a>
 
-        <nav aria-label="Primary" className="hidden items-center gap-0.5 xl:flex">
-          {nav.map((item) => (
-            <a
-              key={item.href}
-              href={item.href.startsWith("#") ? `/${item.href}` : item.href}
-              className="inline-flex min-h-11 items-center rounded-full px-2.5 text-[13px] text-muted transition-colors hover:text-ink"
-            >
-              {item.label}
-            </a>
-          ))}
+        <nav aria-label="Primary" className="hidden items-center gap-0.5 lg:flex">
+          {nav.map((item) => {
+            const href = item.href.startsWith("#") ? `/${item.href}` : item.href;
+            const isHash = item.href.startsWith("#");
+            const current = isHash && active === item.href;
+            return (
+              <a
+                key={item.href}
+                href={href}
+                className={`inline-flex min-h-11 items-center rounded-full px-3 text-[13px] transition-colors ${
+                  current ? "bg-mist text-ink" : "text-muted hover:text-ink"
+                }`}
+              >
+                {item.label}
+              </a>
+            );
+          })}
         </nav>
 
         <div className="flex items-center gap-2">
@@ -68,7 +117,7 @@ export function Header() {
           <button
             ref={buttonRef}
             type="button"
-            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-line bg-surface xl:hidden"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-line bg-surface lg:hidden"
             aria-expanded={open}
             aria-controls={menuId}
             onClick={() => setOpen((value) => !value)}
@@ -83,7 +132,7 @@ export function Header() {
         <div
           id={menuId}
           ref={panelRef}
-          className="border-t border-line bg-canvas px-6 py-4 xl:hidden"
+          className="border-t border-line bg-canvas px-6 py-4 lg:hidden"
         >
           <nav aria-label="Mobile">
             <ul className="flex flex-col">

@@ -30,6 +30,8 @@ export const metadata: Metadata = {
     "AI Product Manager",
     "Ridhi Jolly",
     "KaDeep Studios",
+    "TestStudios",
+    "chat-first QA",
     "accessibility",
     "WCAG",
     "test automation",
@@ -59,8 +61,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F7F6F2" },
-    { media: "(prefers-color-scheme: dark)", color: "#0B0C0F" },
+    { media: "(prefers-color-scheme: light)", color: "#F7F5FA" },
+    { media: "(prefers-color-scheme: dark)", color: "#121018" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -74,6 +76,7 @@ const jsonLd = {
   email: links.email,
   telephone: links.phone,
   url: site.url,
+  image: `${site.url}/portrait.png`,
   sameAs: [links.linkedin, links.github, links.leetcode],
   alumniOf: {
     "@type": "CollegeOrUniversity",
@@ -81,7 +84,7 @@ const jsonLd = {
   },
   worksFor: {
     "@type": "Organization",
-    name: "KaDeep Technologies",
+    name: "KaDeep AI",
   },
 };
 
@@ -100,7 +103,9 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
